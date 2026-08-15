@@ -34,15 +34,13 @@ The project demonstrates the deployment of a domain controller in a VMware virtu
 
 ## Active Directory structure
 
-```mermaid
-flowchart TD
-    D["Domain: net-secur.com"] --> R["OU: net-secur"]
-    R --> B2B["OU: B2B"]
-    R --> BUGH["OU: Bugh"]
-    R --> ELFI["OU: Elfi"]
-    R --> IT["OU: IT-Dep"]
-    R --> SEO["OU: SEO"]
-```
+| Parent distinguished name | Child OU | Security group |
+|---|---|---|
+| `OU=net-secur,DC=net-secur,DC=com` | `B2B` | `RDS-B2B-Users` |
+| `OU=net-secur,DC=net-secur,DC=com` | `Bugh` | `RDS-Bugh-Users` |
+| `OU=net-secur,DC=net-secur,DC=com` | `Elfi` | `RDS-Elfi-Users` |
+| `OU=net-secur,DC=net-secur,DC=com` | `IT-Dep` | `RDS-IT-dep-Users` |
+| `OU=net-secur,DC=net-secur,DC=com` | `SEO` | `RDS-SEO-Users` |
 
 Each child OU currently contains:
 
