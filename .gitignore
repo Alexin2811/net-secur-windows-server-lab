@@ -21,6 +21,13 @@ credentials.*
 passwords.*
 secrets.*
 
+# Raw GPO and policy evidence requiring review before publication
+gpo-backups/
+GPO-Backups/
+gpresult*.html
+rsop*.html
+*.evtx
+
 # Operating-system files
 Thumbs.db
 Desktop.ini

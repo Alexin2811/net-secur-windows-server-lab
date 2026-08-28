@@ -2,39 +2,61 @@
 
 ## Phase 1 — Active Directory foundation
 
-- [x] Deploy Windows Server in VMware.
+- [x] Deploy Windows Server 2022 in VMware.
 - [x] Install Active Directory Domain Services.
-- [x] Promote the server to a domain controller.
+- [x] Promote `DC-1` to a domain controller.
 - [x] Create the domain and OU structure.
 - [x] Create templates, users, and security groups.
 - [ ] Correct the account-state and template-membership findings.
+- [ ] Separate privileged and standard administrative accounts.
 
 ## Phase 2 — Client integration
 
-- [ ] Add a Windows client virtual machine.
-- [ ] Configure the client to use the domain DNS server.
-- [ ] Join the client to `net-secur.com`.
-- [ ] Verify domain sign-in for one user from each OU.
+- [x] Add the `PC-1-WIN11` Windows 11 virtual machine.
+- [x] Join the client to `net-secur.com`.
+- [x] Move its computer object to `OU=IT-Dep`.
 - [ ] Document DNS, authentication, and connectivity tests.
+- [ ] Verify domain sign-in for one user from each OU.
+- [ ] Add at least one pilot workstation to every department OU.
 
 ## Phase 3 — Centralized policy
 
-- [ ] Define password and account-lockout policy.
-- [ ] Configure desktop and security settings with GPO.
-- [ ] Configure Windows Defender and firewall policies.
-- [ ] Test GPO application with `gpresult` and Resultant Set of Policy.
+- [x] Back up existing GPOs before policy changes.
+- [x] Create `Global_Security_Baseline`.
+- [x] Link the baseline to `B2B`, `Bugh`, `Elfi`, `IT-Dep`, and `SEO`.
+- [x] Exclude the domain root and `Domain Controllers` OU from the workstation pilot.
+- [x] Configure removable-media execution blocking and AutoRun/AutoPlay protection.
+- [x] Configure Microsoft Defender, UAC secure desktop, and selected ASR controls.
+- [x] Configure Advanced Audit Policy and process command-line logging.
+- [x] Create and link department-specific security GPOs.
+- [ ] Validate effective policy with `gpresult`, RSoP, and Group Policy Results.
+- [ ] Capture safe evidence from one client in each department.
+- [ ] Define domain password and account-lockout policy separately.
+- [ ] Test restoration of a backed-up GPO.
 
-## Phase 4 — File and access services
+## Phase 4 — Department policy maturation
+
+- [ ] Review Bugh Controlled Folder Access audit events and define allowed applications.
+- [ ] Verify SEO Network Protection in Block mode.
+- [ ] Verify Elfi and IT-Dep PowerShell 4103/4104 logging.
+- [ ] Confirm RDP denial in B2B, Bugh, and SEO.
+- [ ] Confirm IT-Dep RDP requires NLA and a new password prompt.
+- [ ] Standardize the single/double-hyphen GPO naming convention.
+
+## Phase 5 — File and access services
 
 - [ ] Create departmental shared folders.
 - [ ] Apply share and NTFS permissions through security groups.
 - [ ] Validate permitted and denied access with test users.
 - [ ] Document the access-control model.
 
-## Phase 5 — Operations and security
+## Phase 6 — Operations and security
 
-- [ ] Separate privileged and standard accounts.
-- [ ] Configure administrative delegation.
-- [ ] Enable security auditing and centralized log review.
+- [ ] Configure Windows LAPS.
+- [ ] Enforce local administrator membership only after a tested break-glass design exists.
+- [ ] Configure Windows Event Forwarding or another centralized log-review method.
+- [ ] Define Security-log size and retention.
+- [ ] Evaluate BitLocker To Go after creating a recovery-key and corporate-media process.
+- [ ] Evaluate a USB device allowlist after completing the approved hardware inventory.
 - [ ] Configure backup and test restore procedures.
-- [ ] Add PowerShell scripts for repeatable deployment and verification.
+- [ ] Add PowerShell scripts for repeatable validation and evidence collection.
