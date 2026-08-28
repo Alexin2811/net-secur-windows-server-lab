@@ -89,13 +89,21 @@ At the time of this screenshot, the `IT-Dep` tree shows `Global_Security_Baselin
 
 The original correction-required screenshots remain in the repository as chronological evidence and are superseded by the final set above.
 
-## Remaining validation before claiming the baseline is enforced
+## Client-side validation
 
-1. Refresh policy on the client and capture effective-policy evidence.
-2. Verify Defender health with `Get-MpComputerStatus` and `Get-MpPreference`.
-3. Test removable-disk read, write, and execute behavior.
-4. Verify PowerShell events 4103/4104 and Security audit events.
-5. Add screenshots or reports for AutoRun/AutoPlay and ASR effective state.
+| File | Client result confirmed |
+|---|---|
+| [`client-validation/cmd-1.png`](client-validation/cmd-1.png) | `40--ITdep-Security`, `Global_Security_Baseline`, and `Default Domain Policy` applied to `PC-1-WIN11` |
+| [`client-validation/cmd-2.png`](client-validation/cmd-2.png) | Defender service, antivirus, real-time protection, behavior monitoring, and IOAV protection all report `True` |
+| [`client-validation/cmd-3.png`](client-validation/cmd-3.png) | Defender health reconfirmed and `DisableRealtimeMonitoring = False` |
+
+`GPO for ITdep` does not appear in the Computer Scope output, which is consistent with a GPO that has no applicable Computer Configuration settings. This does not affect validation of the security baseline.
+
+## Optional future validation
+
+1. Test removable-disk read, write, and execute behavior.
+2. Verify PowerShell events 4103/4104 and Security audit events.
+3. Add screenshots or reports for AutoRun/AutoPlay and ASR effective state.
 
 ## Recommended validation evidence
 

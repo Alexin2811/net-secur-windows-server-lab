@@ -1,6 +1,6 @@
 # GPO security baseline and deployment
 
-> **Evidence review update, 28 August 2026:** the original screenshots include intermediate and incorrect states. The later `GBS-1` through `GBS-10` set confirms that the identified removable-storage, Defender, PowerShell logging, and IT-Dep link settings were corrected in the GPO editor. Effective application on `PC-1-WIN11` still requires `gpresult`, RSoP, functional USB testing, and Defender-status evidence. See the [screenshot evidence index](../net-secur_com_GPO/README.md).
+> **Evidence review update, 28 August 2026:** the original screenshots include intermediate and incorrect states. The later `GBS-1` through `GBS-10` set confirms the GPO-editor corrections. The `cmd-1` through `cmd-3` client set confirms application of `40--ITdep-Security` and `Global_Security_Baseline` on `PC-1-WIN11` and verifies that Defender Antivirus, real-time protection, behavior monitoring, and IOAV protection are active. See the [screenshot evidence index](../net-secur_com_GPO/README.md).
 
 ## 1. Scope and design
 
@@ -194,7 +194,7 @@ Confirm that:
 7. RDP and inactivity behavior match the department profile.
 8. Defender remains healthy after the policy refresh.
 
-The GPO-editor corrections are complete. Do not mark the baseline as fully enforced until the effective client configuration and functional tests match the target.
+The GPO-editor corrections and primary client-side policy/Defender validation are complete. Functional USB and expanded event-log tests remain optional follow-up evidence.
 
 Use **Group Policy Results** or RSoP when the effective configuration differs from the documented link order.
 

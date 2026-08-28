@@ -106,14 +106,13 @@ Local administrator enforcement was not included in the first stage. An incorrec
 
 ## Priority follow-up
 
-1. Generate `gpresult /h` evidence on `PC-1-WIN11`.
-2. Verify effective Defender health and perform the removable-disk read/write/execute test.
-3. Verify expected Security and PowerShell events.
-4. Test each department policy on at least one computer in its OU.
-5. Review Controlled Folder Access audit findings.
-6. Configure Windows LAPS and separate standard from privileged accounts.
-7. Implement Windows Event Forwarding or another protected central log destination.
-8. Test GPO backup restoration and document rollback criteria.
+1. Optionally perform the removable-disk read/write/execute functional test.
+2. Verify expected Security and PowerShell events during a future logging review.
+3. Test each department policy when a workstation is added to its OU.
+4. Review Controlled Folder Access audit findings.
+5. Configure Windows LAPS and separate standard from privileged accounts.
+6. Implement Windows Event Forwarding or another protected central log destination.
+7. Test GPO backup restoration and document rollback criteria.
 
 ## Repository safety
 
