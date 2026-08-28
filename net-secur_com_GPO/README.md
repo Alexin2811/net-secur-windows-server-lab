@@ -1,0 +1,97 @@
+# Group Policy screenshot evidence
+
+This folder contains screenshots captured during the Net-Secur Group Policy rollout on 27–28 August 2026. The filenames are preserved to retain the original chronology and avoid a noisy rename-only commit.
+
+A screenshot proves only the state visible in the editor at capture time. It does not prove that the GPO applied successfully to a workstation; effective policy still requires `gpresult`, RSoP, or Group Policy Results.
+
+## Evidence status
+
+- **Confirmed** — the visible setting matches the documented target.
+- **Intermediate** — the screenshot records an earlier deployment step, not the final state.
+- **Correction required** — the visible state conflicts with the intended security baseline.
+- **Not confirmed** — the screenshot does not show enough information to support the claim.
+
+## Architecture and linking
+
+| File | Status | What it shows |
+|---|---|---|
+| [`GPO-2.png`](GPO-2.png) | Intermediate | `PC-1-WIN11` and `PC-WIN10X64` in the default `Computers` container before departmental placement |
+| [`GPO-3.png`](GPO-3.png) | Confirmed | Existing `GPO for ITdep` linked to `IT-Dep`; link enabled, `Authenticated Users` filtering |
+| [`GPO-4.png`](GPO-4.png) | Confirmed | Initial `Global_Security_Baseline` link to `IT-Dep`; link enabled and not enforced |
+| [`28-1.png`](28-1.png) | Intermediate | Selection of the existing `Global_Security_Baseline` while adding another OU link |
+| [`28-2.png`](28-2.png) | Confirmed with limitation | Common baseline and department links visible across the OU tree; Bugh link order shows baseline above `40-Bugh-Security` |
+| [`28-3.png`](28-3.png) | Confirmed | Interactive logon inactivity limit set to 300 seconds |
+
+### Limitation in `28-2.png`
+
+At the time of this screenshot, the `IT-Dep` tree shows `Global_Security_Baseline` and the existing `GPO for ITdep`, but does not visibly show `40--ITdep-Security`. A later screenshot or `Get-GPInheritance`/GPMC report is required to prove that additional link.
+
+## Common baseline
+
+| File | Status | What it shows |
+|---|---|---|
+| [`GPO-5.png`](GPO-5.png) | **Correction required** | `All Removable Storage classes: Deny all access = Enabled`; this blocks all removable-storage read and write access and conflicts with the requirement to allow file copying |
+| [`GPO-6.png`](GPO-6.png) | **Correction required** | `Turn off Microsoft Defender Antivirus = Enabled`; despite the misleading double-negative name, this disables Defender Antivirus |
+| [`GPO-7.png`](GPO-7.png) | **Correction required** | `Turn off real-time protection = Enabled`; this disables Defender real-time protection |
+| [`GPO-8.png`](GPO-8.png) | Confirmed | UAC switches to the secure desktop when prompting for elevation |
+| [`GPO-9.png`](GPO-9.png) | Confirmed | Standard users are prompted for credentials on the secure desktop |
+| [`GPO-10.png`](GPO-10.png) | Confirmed | Audit Logon configured for Success and Failure |
+| [`GPO-11.png`](GPO-11.png) | Confirmed | Audit User Account Management configured for Success and Failure |
+| [`GPO-12.png`](GPO-12.png) | Confirmed with note | Audit Process Creation shows Success and Failure selected; Success supplies process-creation event 4688, while Failure is not required for the stated objective |
+| [`GPO-13.png`](GPO-13.png) | Confirmed | Command-line data enabled for process-creation audit events |
+
+## Department-specific policy
+
+### Bugh
+
+| File | Status | What it shows |
+|---|---|---|
+| [`Bugh-1.png`](Bugh-1.png) | Confirmed | Controlled Folder Access enabled in Audit Mode |
+| [`Bugh-2.png`](Bugh-2.png) | Confirmed | Incoming Remote Desktop connections disabled |
+| [`Bugh-3.png`](Bugh-3.png) | Confirmed | Machine inactivity limit set to 300 seconds |
+
+### Elfi
+
+| File | Status | What it shows |
+|---|---|---|
+| [`Elfi-1.png`](Elfi-1.png) | **Correction required** | PowerShell Script Block Logging is visibly `Not Configured`, not Enabled |
+| [`Elfi-2.png`](Elfi-2.png) | Partially confirmed | PowerShell Module Logging is enabled, but the configured module list is not open in this screenshot |
+
+### IT-Dep
+
+| File | Status | What it shows |
+|---|---|---|
+| [`Itdep-1.png`](Itdep-1.png) | Confirmed | Network Level Authentication required for remote connections |
+| [`Itdep-2.png`](Itdep-2.png) | Confirmed | Password prompt required upon RDP connection |
+| [`Itdep-3.png`](Itdep-3.png) | **Correction required** | PowerShell Script Block Logging is visibly `Not Configured`, not Enabled |
+| [`Itdep-4.png`](Itdep-4.png) | Confirmed | PowerShell Module Logging enabled with wildcard module value `*` |
+
+### SEO
+
+| File | Status | What it shows |
+|---|---|---|
+| [`SEO-1.png`](SEO-1.png) | Confirmed | Microsoft Defender Network Protection enabled in Block mode |
+
+## Required corrections before claiming the baseline is enforced
+
+1. Change `All Removable Storage classes: Deny all access` to **Disabled** or **Not Configured**.
+2. Configure `Removable Disks: Deny execute access = Enabled`.
+3. Change `Turn off Microsoft Defender Antivirus` to **Disabled** or **Not Configured**.
+4. Change `Turn off real-time protection` to **Disabled**.
+5. Enable PowerShell Script Block Logging in the Elfi and IT-Dep policies.
+6. Refresh policy on the client and capture effective-policy evidence.
+7. Add screenshots or reports for AutoRun/AutoPlay, ASR, removable-disk execution denial, and the final `40--ITdep-Security` link.
+
+## Recommended validation evidence
+
+Run on the target workstation from an elevated terminal:
+
+```powershell
+gpupdate /force
+gpresult /r /scope computer
+gpresult /h C:\Temp\gpresult.html
+Get-MpComputerStatus
+Get-MpPreference
+```
+
+Review the generated report before publishing it because paths, usernames, security filtering, and command-line information may be sensitive.

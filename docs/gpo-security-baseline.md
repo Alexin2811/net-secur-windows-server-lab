@@ -1,5 +1,7 @@
 # GPO security baseline and deployment
 
+> **Evidence review, 28 August 2026:** this document defines the intended target configuration. The uploaded screenshots include intermediate and incorrect states. In particular, the captured settings disable Defender Antivirus and real-time protection, completely deny removable-storage access, and leave PowerShell Script Block Logging unconfigured in Elfi and IT-Dep. See the [screenshot evidence index](../net-secur_com_GPO/README.md) before treating any control as verified.
+
 ## 1. Scope and design
 
 The Group Policy rollout was performed as a staged workstation pilot. The common baseline is linked to the five department OUs below, not to the domain root and not to the `Domain Controllers` OU.
@@ -51,6 +53,8 @@ Computer Configuration
 
 This configuration is a usability/security compromise. It does not make files on USB media trustworthy; documents and copied executables still require Defender and application-control coverage.
 
+The screenshot `GPO-5.png` does **not** confirm this target: it shows `All Removable Storage classes: Deny all access = Enabled`. That state must be changed to Disabled or Not Configured, and a separate screenshot is still required for `Removable Disks: Deny execute access = Enabled`.
+
 ### 3.2 AutoPlay and AutoRun protection
 
 Policy path:
@@ -73,7 +77,7 @@ These settings prevent automatic launch of content when removable media or anoth
 
 ### 3.3 Microsoft Defender protection
 
-The baseline prevents users or local software from disabling Microsoft Defender Antivirus and real-time protection. It also enables scanning of:
+The target baseline must prevent users or local software from disabling Microsoft Defender Antivirus and real-time protection. It also enables scanning of:
 
 - removable drives;
 - archive files;
@@ -85,6 +89,8 @@ The Attack Surface Reduction rule below is configured in Block mode:
 | ASR rule ID | Effect |
 |---|---|
 | `b2b3f03d-6a65-4f7b-a9c7-1c7ef74a9ba4` | Block untrusted and unsigned processes that run from USB |
+
+The captured evidence currently shows `Turn off Microsoft Defender Antivirus = Enabled` and `Turn off real-time protection = Enabled`. Both are unsafe because enabling a policy named **Turn off...** turns the corresponding protection off. Correct these settings and verify the effective Defender state on the client with `Get-MpComputerStatus` and `Get-MpPreference`.
 
 ### 3.4 UAC secure desktop
 
@@ -107,7 +113,7 @@ Computer Configuration
 |---|---|---|
 | Audit Logon | Success and Failure | Records successful and failed logons |
 | Audit User Account Management | Success and Failure | Records account creation, deletion, and modification |
-| Audit Process Creation | Success | Records process starts, normally as event 4688 |
+| Audit Process Creation | Success | Records process starts, normally as event 4688; the screenshot also has Failure selected, although it is not required for this objective |
 | Audit Removable Storage | Success and Failure | Records permitted and denied access to removable storage |
 
 Command-line capture is also enabled:
@@ -142,7 +148,7 @@ Effect: records applications that would be blocked from protected folders withou
 
 ### 4.3 Elfi — `40--Elfi-Security`
 
-- PowerShell Script Block Logging is enabled.
+- PowerShell Script Block Logging is part of the target configuration, but `Elfi-1.png` shows it as Not Configured and therefore requiring correction.
 - PowerShell Module Logging is enabled for module name `*`.
 - PowerShell execution remains available.
 
@@ -152,7 +158,7 @@ Effect: improves investigation visibility through events such as 4104 and 4103 w
 
 - Require Network Level Authentication for remote connections = Enabled.
 - Always prompt for password upon connection = Enabled.
-- PowerShell Script Block Logging = Enabled.
+- PowerShell Script Block Logging is part of the target configuration, but `Itdep-3.png` shows it as Not Configured and therefore requiring correction.
 - PowerShell Module Logging for `*` = Enabled.
 
 Effect: keeps the administrative department's remote-management capability while strengthening authentication and recording PowerShell activity.
@@ -173,6 +179,8 @@ Run the following from an elevated command prompt on each test workstation:
 gpupdate /force
 gpresult /r /scope computer
 gpresult /h C:\Temp\gpresult.html
+Get-MpComputerStatus
+Get-MpPreference
 ```
 
 Confirm that:
@@ -185,6 +193,8 @@ Confirm that:
 6. AutoRun and AutoPlay do not launch removable-media content automatically.
 7. RDP and inactivity behavior match the department profile.
 8. Defender remains healthy after the policy refresh.
+
+Do not mark the baseline as fully implemented until the correction-required screenshots have been replaced by final-state evidence and the effective client configuration matches the target.
 
 Use **Group Policy Results** or RSoP when the effective configuration differs from the documented link order.
 

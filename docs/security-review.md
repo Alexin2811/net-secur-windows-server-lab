@@ -32,7 +32,7 @@ The implemented department policy names use both single and double hyphens, for 
 
 **Action:** retain the working names during the pilot, then perform a controlled rename after evidence and references have been updated.
 
-## Implemented controls
+## Control status after screenshot review
 
 ### Staged scope
 
@@ -40,17 +40,17 @@ The implemented department policy names use both single and double hyphens, for 
 
 Department GPOs are linked separately with higher priority and without `Enforced`. This design reduces duplication and keeps exceptions visible.
 
-### Removable media and automatic execution
+### Removable media and automatic execution — correction required
 
-Users can read and write ordinary files on removable disks, but direct program execution is denied. AutoPlay and AutoRun commands are disabled, Defender scans removable content, and the USB ASR rule blocks untrusted and unsigned processes.
+The target design allows users to read and write ordinary files on removable disks while denying direct program execution. However, `GPO-5.png` shows `All Removable Storage classes: Deny all access = Enabled`, which instead blocks all removable-storage access. The uploaded set does not prove the final Deny Execute, AutoPlay/AutoRun, Defender removable-scan, or USB ASR states.
 
 **Benefit:** lowers the probability of automatic or direct malware execution while preserving required file-transfer workflows.
 
 **Residual risk:** files can still be copied and opened locally. Documents, scripts, signed malware, and user-assisted execution remain possible, so Defender, ASR, user awareness, and future application control are still required.
 
-### Microsoft Defender
+### Microsoft Defender — correction required
 
-Policy prevents disabling Defender and real-time protection, adds removable/archive/packed-executable scanning, and applies selected ASR and Network Protection controls.
+The target policy prevents disabling Defender and real-time protection. The captured configuration shows the opposite: `Turn off Microsoft Defender Antivirus` and `Turn off real-time protection` are both Enabled. Enabling these double-negative policies disables the protection they name. SEO Network Protection in Block mode is separately confirmed by `SEO-1.png`.
 
 **Benefit:** raises resistance to common malware delivery and malicious network destinations.
 
@@ -64,7 +64,7 @@ Elevation prompts use the secure desktop.
 
 **Residual risk:** UAC is not an administrative-account separation mechanism. Users with local administrator rights still have broad authority after consent.
 
-### Auditing
+### Auditing — editor configuration confirmed, effective events unverified
 
 The baseline records successful and failed logons, account management, process creation, process command lines, and removable-storage access.
 
@@ -76,8 +76,8 @@ The baseline records successful and failed logons, account management, process c
 
 - B2B: RDP disabled and five-minute inactivity lock.
 - Bugh: Controlled Folder Access in Audit Mode, RDP disabled, and five-minute inactivity lock.
-- Elfi: PowerShell Script Block and Module Logging.
-- IT-Dep: RDP requires NLA and a password prompt; PowerShell logging is enabled.
+- Elfi: Module Logging is enabled, but Script Block Logging is visibly Not Configured.
+- IT-Dep: RDP requires NLA and a password prompt; Module Logging for `*` is enabled, but Script Block Logging is visibly Not Configured.
 - SEO: Defender Network Protection in Block mode, RDP disabled, and five-minute inactivity lock.
 
 Controlled Folder Access remains in Audit Mode so legitimate applications can be identified before enforcement.
@@ -106,13 +106,15 @@ Local administrator enforcement was not included in the first stage. An incorrec
 
 ## Priority follow-up
 
-1. Generate `gpresult /h` evidence on `PC-1-WIN11`.
-2. Verify expected Security and PowerShell events.
-3. Test each department policy on at least one computer in its OU.
-4. Review Defender effective state and Controlled Folder Access audit findings.
-5. Configure Windows LAPS and separate standard from privileged accounts.
-6. Implement Windows Event Forwarding or another protected central log destination.
-7. Test GPO backup restoration and document rollback criteria.
+1. Correct the blanket removable-storage denial and both Defender turn-off policies.
+2. Enable Script Block Logging in Elfi and IT-Dep and capture the saved final state.
+3. Generate `gpresult /h` evidence on `PC-1-WIN11` and verify the `40--ITdep-Security` link.
+4. Verify expected Security, PowerShell, and Defender events/status.
+5. Test each department policy on at least one computer in its OU.
+6. Review Controlled Folder Access audit findings.
+7. Configure Windows LAPS and separate standard from privileged accounts.
+8. Implement Windows Event Forwarding or another protected central log destination.
+9. Test GPO backup restoration and document rollback criteria.
 
 ## Repository safety
 

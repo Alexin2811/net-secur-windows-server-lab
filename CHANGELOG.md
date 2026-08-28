@@ -2,6 +2,20 @@
 
 All notable changes to this training project will be documented in this file.
 
+## [0.2.1] — 2026-08-28
+
+### Added
+
+- Twenty-five GPO rollout screenshots in `net-secur_com_GPO`.
+- Evidence index with per-image descriptions and verification status.
+
+### Security review
+
+- Identified three unsafe captured states: blanket removable-storage denial, Defender Antivirus disabled, and real-time protection disabled.
+- Identified PowerShell Script Block Logging as Not Configured in the captured Elfi and IT-Dep policies.
+- Marked the final `40--ITdep-Security` link and effective client policy as requiring additional evidence.
+- Updated the README, implementation notes, security review, baseline guide, and roadmap so documented claims match the available evidence.
+
 ## [0.2.0] — 2026-08-28
 
 ### Added
