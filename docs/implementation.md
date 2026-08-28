@@ -74,7 +74,7 @@ It was deliberately not linked to the domain root or the `Domain Controllers` OU
 
 The department GPO has higher link priority than `Global_Security_Baseline`; links are enabled and not enforced. Existing `GPO for ITdep` and `GPO for SEO` objects remain present.
 
-The common baseline now covers:
+The target common baseline is designed to cover:
 
 - removable-media read/write access with direct execution blocked;
 - AutoPlay and AutoRun protection;
@@ -85,6 +85,8 @@ The common baseline now covers:
 - logon, account-management, process-creation, command-line, and removable-storage auditing.
 
 Department policy adds RDP restrictions, automatic inactivity locking, Controlled Folder Access in Audit Mode, PowerShell logging, Network Protection, or strengthened administrative RDP depending on the OU.
+
+Screenshot review on 28 August identified an incomplete/unsafe captured state: blanket removable-storage denial and both Defender turn-off policies were enabled, while Script Block Logging was Not Configured in Elfi and IT-Dep. These items remain implementation corrections, not completed hardening controls. The screenshot set also does not visibly confirm the final `40--ITdep-Security` link.
 
 See [GPO security baseline and deployment](gpo-security-baseline.md) for exact policy values and validation steps.
 
@@ -107,9 +109,10 @@ See [GPO security baseline and deployment](gpo-security-baseline.md) for exact p
 
 - [x] Existing GPOs were backed up before changes.
 - [x] `Global_Security_Baseline` is linked to all five department OUs.
-- [x] Department-specific GPOs were created and linked.
+- [ ] All department-specific GPO links have been verified; the current screenshots do not visibly confirm `40--ITdep-Security`.
 - [x] The domain root and `Domain Controllers` OU were excluded from the pilot baseline.
 - [ ] Effective policy has been documented with `gpresult /h` for `PC-1-WIN11`.
+- [ ] Correction-required removable-storage, Defender, and Script Block Logging settings have been fixed and re-captured.
 - [ ] At least one computer in every department OU has been tested.
 - [ ] Security and PowerShell audit events have been captured as evidence.
 - [ ] Restore of a GPO backup has been tested.
