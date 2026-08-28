@@ -36,6 +36,7 @@ The project demonstrates deployment of a domain controller and Windows client in
 - Added separate departmental GPOs for role-specific restrictions and logging.
 - Configured the initial removable-media, Microsoft Defender, UAC, and Advanced Audit Policy settings.
 - Corrected the removable-storage, Defender, and PowerShell logging settings identified during the screenshot review and captured final GPO-editor evidence.
+- Validated `Global_Security_Baseline` and `40--ITdep-Security` on `PC-1-WIN11` with `gpresult` and confirmed Microsoft Defender health.
 - Kept the `Domain Controllers` OU and domain root outside the pilot baseline scope.
 
 ## Active Directory structure
@@ -63,7 +64,7 @@ Every departmental OU receives the common `Global_Security_Baseline`. Its local 
 
 See [GPO security baseline and deployment](docs/gpo-security-baseline.md) for the exact settings, scope, limitations, and validation procedure.
 
-The table above describes the target design. The initial screenshots captured several unsafe or incomplete settings; the later `GBS-1` through `GBS-10` evidence set confirms their correction in the GPO editor. Effective application on a client remains a separate validation step.
+The table above describes the target design. The initial screenshots captured several unsafe or incomplete settings; the later `GBS-1` through `GBS-10` evidence set confirms their correction in the GPO editor, and the `cmd-1` through `cmd-3` set confirms client-side application and Defender health.
 
 ## Evidence
 
@@ -79,7 +80,7 @@ The GPO rollout evidence is catalogued and reviewed in [`net-secur_com_GPO`](net
 
 The target GPO design is intended to reduce malware execution from removable storage, disable automatic content execution, strengthen Defender and UAC behavior, and record security-relevant activity.
 
-The uploaded screenshots confirm UAC secure-desktop settings, selected audit categories, Bugh Controlled Folder Access in Audit Mode, department RDP controls, IT-Dep NLA/password prompting, PowerShell logging, SEO Network Protection, removable-disk execution denial, and corrected Defender policies. The final GPO-editor state is documented, but effective application still requires `gpresult`, RSoP, USB execution testing, and Defender-status evidence from a client.
+The uploaded screenshots confirm UAC secure-desktop settings, selected audit categories, Bugh Controlled Folder Access in Audit Mode, department RDP controls, IT-Dep NLA/password prompting, PowerShell logging, SEO Network Protection, removable-disk execution denial, corrected Defender policies, effective application of the IT-Dep and baseline GPOs, and healthy Defender services on `PC-1-WIN11`.
 
 BitLocker To Go and a USB device allowlist remain deliberately deferred. The lab must first establish corporate-media ownership, recovery-key handling, and an approved hardware inventory; premature enforcement could block legitimate devices or cause loss of access to data.
 
@@ -105,7 +106,7 @@ Passwords, recovery material, private keys, VM disks, and other secrets must nev
 - [x] Create and link departmental security GPOs.
 - [x] Configure endpoint auditing and review the captured settings.
 - [x] Correct and document the removable-media, Defender, PowerShell logging, and IT-Dep link states identified in the screenshot review.
-- [ ] Validate effective policy with `gpresult`, RSoP, and Event Viewer.
+- [x] Validate effective computer policy with `gpresult` and confirm Defender health on `PC-1-WIN11`.
 - [ ] Review account and group membership configuration.
 - [ ] Create shared folders and apply NTFS/share permissions.
 - [ ] Implement administrative role separation and Windows LAPS.

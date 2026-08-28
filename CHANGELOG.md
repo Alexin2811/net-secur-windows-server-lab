@@ -2,6 +2,19 @@
 
 All notable changes to this training project will be documented in this file.
 
+## [0.2.3] — 2026-08-28
+
+### Validated
+
+- Confirmed `PC-1-WIN11` is located in `OU=IT-Dep` and receives policy from `DC-1.net-secur.com`.
+- Confirmed `40--ITdep-Security`, `Global_Security_Baseline`, and `Default Domain Policy` in the applied computer GPO list.
+- Confirmed Defender Antivirus, real-time protection, behavior monitoring, and IOAV protection are enabled.
+- Confirmed `DisableRealtimeMonitoring = False`.
+
+### Added
+
+- Client validation screenshots `cmd-1.png` through `cmd-3.png`.
+
 ## [0.2.2] — 2026-08-28
 
 ### Fixed

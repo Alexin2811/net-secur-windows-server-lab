@@ -29,10 +29,11 @@
 - [ ] Verify AutoRun/AutoPlay protection and removable-media behavior on a client.
 - [x] Configure UAC secure-desktop controls.
 - [x] Correct and document Microsoft Defender Antivirus and real-time protection policy states.
-- [ ] Verify effective Defender and selected ASR states on a client.
+- [x] Verify effective Defender Antivirus and real-time protection states on `PC-1-WIN11`.
+- [ ] Verify selected ASR states during a future extended test.
 - [x] Configure Advanced Audit Policy and process command-line logging.
 - [x] Verify the IT-Dep security GPO link and enable the missing Script Block Logging settings.
-- [ ] Validate effective policy with `gpresult`, RSoP, and Group Policy Results.
+- [x] Validate effective computer policy with `gpresult` on `PC-1-WIN11`.
 - [ ] Capture safe evidence from one client in each department.
 - [ ] Define domain password and account-lockout policy separately.
 - [ ] Test restoration of a backed-up GPO.
