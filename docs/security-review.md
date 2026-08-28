@@ -40,17 +40,17 @@ The implemented department policy names use both single and double hyphens, for 
 
 Department GPOs are linked separately with higher priority and without `Enforced`. This design reduces duplication and keeps exceptions visible.
 
-### Removable media and automatic execution — correction required
+### Removable media and automatic execution — corrected in GPO editor
 
-The target design allows users to read and write ordinary files on removable disks while denying direct program execution. However, `GPO-5.png` shows `All Removable Storage classes: Deny all access = Enabled`, which instead blocks all removable-storage access. The uploaded set does not prove the final Deny Execute, AutoPlay/AutoRun, Defender removable-scan, or USB ASR states.
+The target design allows users to read and write ordinary files on removable disks while denying direct program execution. The original `GPO-5.png` shows an incorrect blanket denial; final screenshots `GBS-1` through `GBS-4` confirm that read, write, and blanket denial are Disabled while execute denial is Enabled. AutoPlay/AutoRun, Defender removable scanning, USB ASR, and effective client behavior still require separate evidence.
 
 **Benefit:** lowers the probability of automatic or direct malware execution while preserving required file-transfer workflows.
 
 **Residual risk:** files can still be copied and opened locally. Documents, scripts, signed malware, and user-assisted execution remain possible, so Defender, ASR, user awareness, and future application control are still required.
 
-### Microsoft Defender — correction required
+### Microsoft Defender — corrected in GPO editor
 
-The target policy prevents disabling Defender and real-time protection. The captured configuration shows the opposite: `Turn off Microsoft Defender Antivirus` and `Turn off real-time protection` are both Enabled. Enabling these double-negative policies disables the protection they name. SEO Network Protection in Block mode is separately confirmed by `SEO-1.png`.
+The original captured configuration shows both Defender turn-off policies Enabled. Final screenshots `GBS-5.png` and `GBS-6.png` confirm that both are now Disabled. SEO Network Protection in Block mode is separately confirmed by `SEO-1.png`. Effective Defender health must still be verified on the client.
 
 **Benefit:** raises resistance to common malware delivery and malicious network destinations.
 
@@ -76,8 +76,8 @@ The baseline records successful and failed logons, account management, process c
 
 - B2B: RDP disabled and five-minute inactivity lock.
 - Bugh: Controlled Folder Access in Audit Mode, RDP disabled, and five-minute inactivity lock.
-- Elfi: Module Logging is enabled, but Script Block Logging is visibly Not Configured.
-- IT-Dep: RDP requires NLA and a password prompt; Module Logging for `*` is enabled, but Script Block Logging is visibly Not Configured.
+- Elfi: Script Block Logging and Module Logging for `*` are enabled in the final evidence.
+- IT-Dep: RDP requires NLA and a password prompt; Script Block Logging and Module Logging for `*` are enabled.
 - SEO: Defender Network Protection in Block mode, RDP disabled, and five-minute inactivity lock.
 
 Controlled Folder Access remains in Audit Mode so legitimate applications can be identified before enforcement.
@@ -106,15 +106,14 @@ Local administrator enforcement was not included in the first stage. An incorrec
 
 ## Priority follow-up
 
-1. Correct the blanket removable-storage denial and both Defender turn-off policies.
-2. Enable Script Block Logging in Elfi and IT-Dep and capture the saved final state.
-3. Generate `gpresult /h` evidence on `PC-1-WIN11` and verify the `40--ITdep-Security` link.
-4. Verify expected Security, PowerShell, and Defender events/status.
-5. Test each department policy on at least one computer in its OU.
-6. Review Controlled Folder Access audit findings.
-7. Configure Windows LAPS and separate standard from privileged accounts.
-8. Implement Windows Event Forwarding or another protected central log destination.
-9. Test GPO backup restoration and document rollback criteria.
+1. Generate `gpresult /h` evidence on `PC-1-WIN11`.
+2. Verify effective Defender health and perform the removable-disk read/write/execute test.
+3. Verify expected Security and PowerShell events.
+4. Test each department policy on at least one computer in its OU.
+5. Review Controlled Folder Access audit findings.
+6. Configure Windows LAPS and separate standard from privileged accounts.
+7. Implement Windows Event Forwarding or another protected central log destination.
+8. Test GPO backup restoration and document rollback criteria.
 
 ## Repository safety
 

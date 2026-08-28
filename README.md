@@ -35,7 +35,7 @@ The project demonstrates deployment of a domain controller and Windows client in
 - Created `Global_Security_Baseline` and linked it to all five departmental OUs.
 - Added separate departmental GPOs for role-specific restrictions and logging.
 - Configured the initial removable-media, Microsoft Defender, UAC, and Advanced Audit Policy settings.
-- Reviewed the uploaded GPO screenshots and identified several settings that require correction before the baseline can be described as fully enforced.
+- Corrected the removable-storage, Defender, and PowerShell logging settings identified during the screenshot review and captured final GPO-editor evidence.
 - Kept the `Domain Controllers` OU and domain root outside the pilot baseline scope.
 
 ## Active Directory structure
@@ -63,7 +63,7 @@ Every departmental OU receives the common `Global_Security_Baseline`. Its local 
 
 See [GPO security baseline and deployment](docs/gpo-security-baseline.md) for the exact settings, scope, limitations, and validation procedure.
 
-The table above describes the target design. Screenshot review shows that PowerShell Script Block Logging was still **Not Configured** in the captured Elfi and IT-Dep policy windows, while several common-baseline settings were captured in an unsafe intermediate state.
+The table above describes the target design. The initial screenshots captured several unsafe or incomplete settings; the later `GBS-1` through `GBS-10` evidence set confirms their correction in the GPO editor. Effective application on a client remains a separate validation step.
 
 ## Evidence
 
@@ -73,13 +73,13 @@ The table above describes the target design. Screenshot review shows that PowerS
 
 Additional screenshots are available in [`docs/screenshots`](docs/screenshots).
 
-The GPO rollout evidence is catalogued and reviewed in [`net-secur_com_GPO`](net-secur_com_GPO). The index distinguishes confirmed settings, intermediate screenshots, and configurations that require correction.
+The GPO rollout evidence is catalogued and reviewed in [`net-secur_com_GPO`](net-secur_com_GPO). The index distinguishes the original intermediate screenshots from the final correction evidence.
 
 ## Security status
 
 The target GPO design is intended to reduce malware execution from removable storage, disable automatic content execution, strengthen Defender and UAC behavior, and record security-relevant activity.
 
-The uploaded screenshots confirm UAC secure-desktop settings, selected audit categories, Bugh Controlled Folder Access in Audit Mode, department RDP controls, IT-Dep NLA/password prompting, PowerShell Module Logging, and SEO Network Protection. They also reveal that `Deny all removable storage access`, `Turn off Microsoft Defender Antivirus`, and `Turn off real-time protection` were enabled in the captured state. Those three settings must be corrected before the baseline can be considered secure. Effective application still requires `gpresult`, RSoP, and Defender-status evidence from a client.
+The uploaded screenshots confirm UAC secure-desktop settings, selected audit categories, Bugh Controlled Folder Access in Audit Mode, department RDP controls, IT-Dep NLA/password prompting, PowerShell logging, SEO Network Protection, removable-disk execution denial, and corrected Defender policies. The final GPO-editor state is documented, but effective application still requires `gpresult`, RSoP, USB execution testing, and Defender-status evidence from a client.
 
 BitLocker To Go and a USB device allowlist remain deliberately deferred. The lab must first establish corporate-media ownership, recovery-key handling, and an approved hardware inventory; premature enforcement could block legitimate devices or cause loss of access to data.
 
@@ -104,7 +104,7 @@ Passwords, recovery material, private keys, VM disks, and other secrets must nev
 - [x] Back up existing GPOs and deploy the common security baseline.
 - [x] Create and link departmental security GPOs.
 - [x] Configure endpoint auditing and review the captured settings.
-- [ ] Correct the removable-media and Defender policy states identified in the screenshot review.
+- [x] Correct and document the removable-media, Defender, PowerShell logging, and IT-Dep link states identified in the screenshot review.
 - [ ] Validate effective policy with `gpresult`, RSoP, and Event Viewer.
 - [ ] Review account and group membership configuration.
 - [ ] Create shared folders and apply NTFS/share permissions.
