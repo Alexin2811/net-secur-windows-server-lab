@@ -24,7 +24,7 @@ A screenshot proves only the state visible in the editor at capture time. It doe
 
 ### Limitation in `28-2.png`
 
-At the time of this screenshot, the `IT-Dep` tree shows `Global_Security_Baseline` and the existing `GPO for ITdep`, but does not visibly show `40--ITdep-Security`. A later screenshot or `Get-GPInheritance`/GPMC report is required to prove that additional link.
+At the time of this screenshot, the `IT-Dep` tree shows `Global_Security_Baseline` and the existing `GPO for ITdep`, but does not visibly show `40--ITdep-Security`. This limitation is superseded by `final/GBS-10.png`.
 
 ## Common baseline
 
@@ -72,15 +72,30 @@ At the time of this screenshot, the `IT-Dep` tree shows `Global_Security_Baselin
 |---|---|---|
 | [`SEO-1.png`](SEO-1.png) | Confirmed | Microsoft Defender Network Protection enabled in Block mode |
 
-## Required corrections before claiming the baseline is enforced
+## Final correction evidence
 
-1. Change `All Removable Storage classes: Deny all access` to **Disabled** or **Not Configured**.
-2. Configure `Removable Disks: Deny execute access = Enabled`.
-3. Change `Turn off Microsoft Defender Antivirus` to **Disabled** or **Not Configured**.
-4. Change `Turn off real-time protection` to **Disabled**.
-5. Enable PowerShell Script Block Logging in the Elfi and IT-Dep policies.
-6. Refresh policy on the client and capture effective-policy evidence.
-7. Add screenshots or reports for AutoRun/AutoPlay, ASR, removable-disk execution denial, and the final `40--ITdep-Security` link.
+| File | Final state confirmed |
+|---|---|
+| [`final/GBS-1.png`](final/GBS-1.png) | Removable Disks: Deny read access = Disabled |
+| [`final/GBS-2.png`](final/GBS-2.png) | All Removable Storage classes: Deny all access = Disabled |
+| [`final/GBS-3.png`](final/GBS-3.png) | Removable Disks: Deny write access = Disabled |
+| [`final/GBS-4.png`](final/GBS-4.png) | Removable Disks: Deny execute access = Enabled |
+| [`final/GBS-5.png`](final/GBS-5.png) | Turn off Microsoft Defender Antivirus = Disabled |
+| [`final/GBS-6.png`](final/GBS-6.png) | Turn off real-time protection = Disabled |
+| [`final/GBS-7.png`](final/GBS-7.png) | Elfi PowerShell Script Block Logging = Enabled |
+| [`final/GBS-8.png`](final/GBS-8.png) | Elfi PowerShell Module Logging = Enabled, module value `*` |
+| [`final/GBS-9.png`](final/GBS-9.png) | IT-Dep PowerShell Script Block Logging = Enabled; Module Logging `*` was also confirmed during the correction session |
+| [`final/GBS-10.png`](final/GBS-10.png) | `40--ITdep-Security` linked at priority 1; all three IT-Dep links enabled and not enforced |
+
+The original correction-required screenshots remain in the repository as chronological evidence and are superseded by the final set above.
+
+## Remaining validation before claiming the baseline is enforced
+
+1. Refresh policy on the client and capture effective-policy evidence.
+2. Verify Defender health with `Get-MpComputerStatus` and `Get-MpPreference`.
+3. Test removable-disk read, write, and execute behavior.
+4. Verify PowerShell events 4103/4104 and Security audit events.
+5. Add screenshots or reports for AutoRun/AutoPlay and ASR effective state.
 
 ## Recommended validation evidence
 

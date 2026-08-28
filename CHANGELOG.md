@@ -2,6 +2,24 @@
 
 All notable changes to this training project will be documented in this file.
 
+## [0.2.2] — 2026-08-28
+
+### Fixed
+
+- Corrected removable-storage policy to allow read/write access while denying direct execution.
+- Corrected `Turn off Microsoft Defender Antivirus` and `Turn off real-time protection` to Disabled.
+- Enabled PowerShell Script Block Logging for Elfi and IT-Dep and confirmed Module Logging for `*`.
+- Confirmed `40--ITdep-Security` as enabled, not enforced, and first in IT-Dep link order.
+
+### Added
+
+- Final correction screenshots `GBS-1` through `GBS-10`.
+- Updated evidence status across the README, implementation notes, security review, baseline guide, and roadmap.
+
+### Remaining validation
+
+- Effective client policy, Defender health, USB behavior, and PowerShell/Security events still require workstation evidence.
+
 ## [0.2.1] — 2026-08-28
 
 ### Added

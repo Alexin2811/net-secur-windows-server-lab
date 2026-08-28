@@ -1,6 +1,6 @@
 # GPO security baseline and deployment
 
-> **Evidence review, 28 August 2026:** this document defines the intended target configuration. The uploaded screenshots include intermediate and incorrect states. In particular, the captured settings disable Defender Antivirus and real-time protection, completely deny removable-storage access, and leave PowerShell Script Block Logging unconfigured in Elfi and IT-Dep. See the [screenshot evidence index](../net-secur_com_GPO/README.md) before treating any control as verified.
+> **Evidence review update, 28 August 2026:** the original screenshots include intermediate and incorrect states. The later `GBS-1` through `GBS-10` set confirms that the identified removable-storage, Defender, PowerShell logging, and IT-Dep link settings were corrected in the GPO editor. Effective application on `PC-1-WIN11` still requires `gpresult`, RSoP, functional USB testing, and Defender-status evidence. See the [screenshot evidence index](../net-secur_com_GPO/README.md).
 
 ## 1. Scope and design
 
@@ -53,7 +53,7 @@ Computer Configuration
 
 This configuration is a usability/security compromise. It does not make files on USB media trustworthy; documents and copied executables still require Defender and application-control coverage.
 
-The screenshot `GPO-5.png` does **not** confirm this target: it shows `All Removable Storage classes: Deny all access = Enabled`. That state must be changed to Disabled or Not Configured, and a separate screenshot is still required for `Removable Disks: Deny execute access = Enabled`.
+The original `GPO-5.png` shows an incorrect blanket denial. It is superseded by `final/GBS-1.png` through `final/GBS-4.png`, which confirm read and write denial Disabled, blanket denial Disabled, and execute denial Enabled.
 
 ### 3.2 AutoPlay and AutoRun protection
 
@@ -90,7 +90,7 @@ The Attack Surface Reduction rule below is configured in Block mode:
 |---|---|
 | `b2b3f03d-6a65-4f7b-a9c7-1c7ef74a9ba4` | Block untrusted and unsigned processes that run from USB |
 
-The captured evidence currently shows `Turn off Microsoft Defender Antivirus = Enabled` and `Turn off real-time protection = Enabled`. Both are unsafe because enabling a policy named **Turn off...** turns the corresponding protection off. Correct these settings and verify the effective Defender state on the client with `Get-MpComputerStatus` and `Get-MpPreference`.
+The original evidence shows both Defender turn-off policies Enabled. The final `GBS-5.png` and `GBS-6.png` screenshots supersede that state and confirm both policies as Disabled. The effective client state must still be verified with `Get-MpComputerStatus` and `Get-MpPreference`.
 
 ### 3.4 UAC secure desktop
 
@@ -148,7 +148,7 @@ Effect: records applications that would be blocked from protected folders withou
 
 ### 4.3 Elfi — `40--Elfi-Security`
 
-- PowerShell Script Block Logging is part of the target configuration, but `Elfi-1.png` shows it as Not Configured and therefore requiring correction.
+- PowerShell Script Block Logging is enabled in the final `GBS-7.png` evidence.
 - PowerShell Module Logging is enabled for module name `*`.
 - PowerShell execution remains available.
 
@@ -158,7 +158,7 @@ Effect: improves investigation visibility through events such as 4104 and 4103 w
 
 - Require Network Level Authentication for remote connections = Enabled.
 - Always prompt for password upon connection = Enabled.
-- PowerShell Script Block Logging is part of the target configuration, but `Itdep-3.png` shows it as Not Configured and therefore requiring correction.
+- PowerShell Script Block Logging is enabled in the final `GBS-9.png` evidence.
 - PowerShell Module Logging for `*` = Enabled.
 
 Effect: keeps the administrative department's remote-management capability while strengthening authentication and recording PowerShell activity.
@@ -194,7 +194,7 @@ Confirm that:
 7. RDP and inactivity behavior match the department profile.
 8. Defender remains healthy after the policy refresh.
 
-Do not mark the baseline as fully implemented until the correction-required screenshots have been replaced by final-state evidence and the effective client configuration matches the target.
+The GPO-editor corrections are complete. Do not mark the baseline as fully enforced until the effective client configuration and functional tests match the target.
 
 Use **Group Policy Results** or RSoP when the effective configuration differs from the documented link order.
 
