@@ -25,10 +25,11 @@
 - [x] Create `Global_Security_Baseline`.
 - [x] Link the baseline to `B2B`, `Bugh`, `Elfi`, `IT-Dep`, and `SEO`.
 - [x] Exclude the domain root and `Domain Controllers` OU from the workstation pilot.
-- [x] Configure removable-media execution blocking and AutoRun/AutoPlay protection.
-- [x] Configure Microsoft Defender, UAC secure desktop, and selected ASR controls.
+- [ ] Correct and verify removable-media execution blocking and AutoRun/AutoPlay protection.
+- [x] Configure UAC secure-desktop controls.
+- [ ] Correct and verify Microsoft Defender Antivirus, real-time protection, and selected ASR controls.
 - [x] Configure Advanced Audit Policy and process command-line logging.
-- [x] Create and link department-specific security GPOs.
+- [ ] Verify every department-specific GPO link and enable the missing Script Block Logging settings.
 - [ ] Validate effective policy with `gpresult`, RSoP, and Group Policy Results.
 - [ ] Capture safe evidence from one client in each department.
 - [ ] Define domain password and account-lockout policy separately.
